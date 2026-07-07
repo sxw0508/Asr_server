@@ -1,0 +1,27 @@
+# 模型权重（体积大，需本地或 HuggingFace 下载）
+model/
+models/
+
+# 运行时日志与 PID
+logs/
+**/logs/
+*.pid
+*.log
+nohup.out
+compiled_cache.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+venv/
+.env
+
+# 第三方克隆仓库（已有 qwen3_asr_plugin）
+Qwen3-ASR/
+
+# IDE
+.idea/
+.vscode/

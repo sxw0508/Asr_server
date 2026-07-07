@@ -1,0 +1,31 @@
+services:
+  qwen3-asr:
+    image: qwen3-asr:latest
+    container_name: qwen3-asr
+    restart: always
+    runtime: nvidia
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+      ASR_MODEL_PATH: /workspace/model/Qwen3-ASR-1.7B
+      ASR_GPU_MEMORY_UTILIZATION: ${ASR_GPU_MEMORY_UTILIZATION:-0.3}
+      ASR_STARTUP_TIMEOUT_SEC: ${ASR_STARTUP_TIMEOUT_SEC:-300}
+      ASR_REALTIME_PATCH: ${ASR_REALTIME_PATCH:-1}
+      ASR_ENABLE_PREFIX_CACHING: ${ASR_ENABLE_PREFIX_CACHING:-1}
+      VLLM_NO_USAGE_STATS: "1"
+    ports:
+      - "${ASR_GATEWAY_HOST_PORT:-23311}:23311"
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    entrypoint: ["/bin/bash", "/workspace/entrypoint.sh"]
+    shm_size: "4g"
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:23311/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 360s
