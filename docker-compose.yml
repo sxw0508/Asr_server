@@ -1,6 +1,16 @@
+# 启动（推荐）：先登录仓库并拉取镜像，再 up
+#   ./compose_up.sh
+# 或手动：
+#   set -a && source .env && set +a
+#   echo "$ACR_PASSWORD" | docker login --username "$ACR_USERNAME" --password-stdin "$ACR_REGISTRY"
+#   docker compose pull && docker compose up -d
+#
+# 凭证放在 .env（已 gitignore），参考 .env.example
+
 services:
   qwen3-asr:
-    image: qwen3-asr:latest
+    image: ${ASR_IMAGE:-autoflux-registry.cn-hangzhou.cr.aliyuncs.com/autobio/qwen3-asr-jetson:latest}
+    pull_policy: ${ASR_PULL_POLICY:-always}
     container_name: qwen3-asr
     restart: always
     runtime: nvidia
